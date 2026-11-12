@@ -36,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="navbar-inner">
             <a href="#" className="brand-wrapper" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               <div className="brand-symbol">
-                <BookOpen size={22} />
+                <BookOpen size={20} />
               </div>
               <div className="brand-text">
                 <span className="brand-title">{SITE_INFO.title}</span>
@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Solusi
               </button>
               <button type="button" className="nav-link" onClick={() => handleNavClick('modul')}>
-                Apa Dipelajari
+                Kandungan
               </button>
               <button type="button" className="nav-link" onClick={() => handleNavClick('preview')}>
                 Preview Buku
@@ -73,9 +73,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onOpenCart}
                   aria-label="Troli pesanan"
                 >
-                  <ShoppingCart size={19} />
-                  <span className="nav-cart-label">Troli</span>
-                  {cartCount > 0 && <span className="nav-cart-badge">{cartCount}</span>}
+                  <ShoppingCart size={17} />
+                  <span>Troli</span>
+                  <span className="nav-cart-badge">{cartCount}</span>
                 </button>
               )}
 
@@ -84,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="nav-cta-btn"
                 onClick={() => onOpenOrder()}
               >
-                <ShieldCheck size={18} />
+                <ShieldCheck size={16} />
                 <span>Tempah Sekarang</span>
               </button>
 
