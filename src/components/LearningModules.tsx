@@ -1,78 +1,59 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   PlaneTakeoff,
   Smartphone,
   Compass,
   HeartHandshake,
   ClipboardCheck,
-  CheckCircle,
+  CheckCircle2,
 } from 'lucide-react'
 import { LEARNING_PILLARS } from '../data/salesData'
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  PlaneTakeoff: <PlaneTakeoff size={24} />,
-  Smartphone: <Smartphone size={24} />,
-  Compass: <Compass size={24} />,
-  HeartHandshake: <HeartHandshake size={24} />,
-  ClipboardCheck: <ClipboardCheck size={24} />,
+  PlaneTakeoff: <PlaneTakeoff size={22} />,
+  Smartphone: <Smartphone size={22} />,
+  Compass: <Compass size={22} />,
+  HeartHandshake: <HeartHandshake size={22} />,
+  ClipboardCheck: <ClipboardCheck size={22} />,
 }
 
 export const LearningModules: React.FC = () => {
-  const [activeTab, setActiveTab] = useState(LEARNING_PILLARS[0].id)
-
-  const currentPillar = LEARNING_PILLARS.find((p) => p.id === activeTab) || LEARNING_PILLARS[0]
-
   return (
     <section id="modul" className="section-pad curriculum-section">
       <div className="container">
         <div className="section-header">
-          <span className="badge-tag">Kandungan Padat &amp; Menyeluruh</span>
+          <div className="badge-tag gold">Kandungan Buku</div>
           <h2 className="section-title">Apa Yang Anda Akan Belajar?</h2>
           <p className="section-subtitle">
-            Setiap fasa disusun mengikut kronologi perjalanan sebenar supaya anda faham setiap tindakan yang perlu diambil dengan tenang.
+            Semua langkah penting diringkaskan mengikut 5 fasa utama supaya anda faham dengan cepat.
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="pillar-tabs">
-          {LEARNING_PILLARS.map((pillar) => (
-            <button
-              key={pillar.id}
-              type="button"
-              className={`pillar-tab-btn ${activeTab === pillar.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(pillar.id)}
-            >
-              {ICON_MAP[pillar.icon]}
-              <span>{pillar.title}</span>
-            </button>
-          ))}
-        </div>
+        <div className="curriculum-pillars-container">
+          {LEARNING_PILLARS.map((pillar, idx) => (
+            <div key={pillar.id} className="curriculum-pillar-card">
+              <div className="curriculum-card-head">
+                <div className="curriculum-head-icon">
+                  {ICON_MAP[pillar.icon]}
+                </div>
+                <div className="curriculum-head-info">
+                  <span className="curriculum-phase-num">Modul 0{idx + 1}</span>
+                  <h3 className="curriculum-head-title">{pillar.title}</h3>
+                </div>
+              </div>
 
-        {/* Active Content Card */}
-        <div className="curriculum-card">
-          <div className="curriculum-card-head">
-            <div className="curriculum-head-left">
-              <div className="curriculum-head-icon">
-                {ICON_MAP[currentPillar.icon]}
-              </div>
-              <div>
-                <h3 className="curriculum-head-title">{currentPillar.title}</h3>
-                <p className="curriculum-head-tagline">{currentPillar.tagline}</p>
-              </div>
+              <div className="curriculum-divider" />
+
+              <ul className="curriculum-topics-list">
+                {pillar.topics.map((topic, i) => (
+                  <li key={i} className="curriculum-topic-row">
+                    <CheckCircle2 size={16} className="topic-check-icon" />
+                    <span className="topic-text">{topic}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <span className="badge-tag gold" style={{ margin: 0 }}>
-              {currentPillar.topics.length} Topik Praktikal
-            </span>
-          </div>
-
-          <div className="topics-grid">
-            {currentPillar.topics.map((topic, i) => (
-              <div key={i} className="topic-item">
-                <CheckCircle size={18} className="topic-bullet" />
-                <span className="topic-item-text">{topic}</span>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </section>

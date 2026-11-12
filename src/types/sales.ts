@@ -1,3 +1,17 @@
+export interface Product {
+  id: string
+  name: string
+  price: number
+  originalPrice?: number
+  image: string
+  badge?: string
+}
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}
+
 export interface LearningPillar {
   id: string
   title: string

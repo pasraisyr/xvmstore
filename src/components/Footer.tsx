@@ -38,13 +38,12 @@ export const Footer: React.FC = () => {
           <div className="footer-col">
             <h4>Pautan Pantas</h4>
             <ul className="footer-links">
-              <li><a href="#masalah">Masalah Pelanggan</a></li>
-              <li><a href="#solusi">Formula &amp; Solusi</a></li>
-              <li><a href="#modul">Apa Yang Dipelajari</a></li>
+              <li><a href="#masalah">Masalah Customer</a></li>
+              <li><a href="#solusi">Solution</a></li>
+              <li><a href="#modul">Apa Yang Anda Akan Belajar</a></li>
               <li><a href="#preview">Preview Buku</a></li>
-              <li><a href="#bonus">Bonus Percuma</a></li>
-              <li><a href="#harga">Pakej &amp; Harga</a></li>
-              <li><a href="#faq">Soalan Lazim (FAQ)</a></li>
+              <li><a href="#bonus">Cadangan Bonus</a></li>
+              <li><a href="#harga">Harga &amp; CTA</a></li>
             </ul>
           </div>
 

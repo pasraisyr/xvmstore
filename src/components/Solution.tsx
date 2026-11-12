@@ -1,61 +1,52 @@
 import React from 'react'
-import { Sparkles, ArrowRight, Compass } from 'lucide-react'
-import { SITE_INFO, JOURNEY_STEPS } from '../data/salesData'
+import { ArrowRight, Sparkles } from 'lucide-react'
+import { SITE_INFO } from '../data/salesData'
+
+const FORMULA_STEPS = [
+  { num: '01', text: 'Baca' },
+  { num: '02', text: 'Faham' },
+  { num: '03', text: 'Rancang' },
+  { num: '04', text: 'Tempah' },
+  { num: '05', text: 'Berangkat' },
+  { num: '06', text: 'Tunaikan Umrah' },
+]
 
 export const Solution: React.FC = () => {
   return (
     <section id="solusi" className="section-pad solution-section">
       <div className="container">
         <div className="section-header">
-          <span className="badge-tag">
+          <div className="badge-tag gold">
             <Sparkles size={14} />
-            Jawapan Lengkap Dalam Satu Rujukan
-          </span>
-          <h2 className="section-title">Sebab Itu Kami Hasilkan: {SITE_INFO.title}</h2>
-          <p className="section-subtitle">
-            Buku ini dicipta khusus untuk meringkaskan segala maklumat penting Umrah DIY, supaya anda tidak perlu lagi membuang masa membuka puluhan website, blog lama, posting Facebook atau video TikTok yang berselerak.
+            <span>Solusi Lengkap</span>
+          </div>
+          <p className="section-eyebrow-text">
+            Sebab itu kami hasilkan...
+          </p>
+          <h2 className="section-title solution-main-title">{SITE_INFO.title}</h2>
+          <p className="section-subtitle solution-desc-text">
+            Buku ini dibuat untuk meringkaskan maklumat penting Umrah DIY supaya anda tidak perlu membuka puluhan website, video dan posting untuk mendapatkan gambaran keseluruhan perjalanan.
           </p>
         </div>
 
-        {/* Dynamic Flow Box */}
+        {/* Formula Flow Steps */}
         <div className="solution-motto-box">
-          <div className="motto-eyebrow">Formula Mudah Umrah DIY</div>
-          <div className="motto-flow">
-            Baca <span style={{ color: 'var(--gold-400)' }}>→</span> Faham{' '}
-            <span style={{ color: 'var(--gold-400)' }}>→</span> Rancang{' '}
-            <span style={{ color: 'var(--gold-400)' }}>→</span> Tempah{' '}
-            <span style={{ color: 'var(--gold-400)' }}>→</span> Berangkat{' '}
-            <span style={{ color: 'var(--gold-400)' }}>→</span> Tunaikan Umrah
+          <div className="solution-box-header">
+            <span className="solution-box-tagline">Formula Langkah Demi Langkah:</span>
           </div>
-        </div>
-
-        {/* Visual Roadmap of the Journey */}
-        <div className="roadmap-container">
-          <div className="roadmap-title">
-            <Compass size={20} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '8px', color: 'var(--primary-700)' }} />
-            Gambaran Keseluruhan Perjalanan Anda Dari A Hingga Z
-          </div>
-
-          <div className="roadmap-grid">
-            {JOURNEY_STEPS.map((item, idx) => (
-              <div key={idx} className="roadmap-step-card">
-                <span className="step-num">{item.step}</span>
-                <h4 className="step-title">{item.title}</h4>
-                <p className="step-desc">{item.desc}</p>
-                {idx < JOURNEY_STEPS.length - 1 && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      right: '-8px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      display: 'none', // for responsive grid
-                    }}
-                  >
-                    <ArrowRight size={14} color="var(--gold-500)" />
+          <div className="solution-formula-flow">
+            {FORMULA_STEPS.map((step, idx) => (
+              <React.Fragment key={idx}>
+                <div className="formula-step-pill">
+                  <span className="step-num-badge">{step.num}</span>
+                  <span className="step-text-label">{step.text}</span>
+                </div>
+                {idx < FORMULA_STEPS.length - 1 && (
+                  <div className="formula-arrow" aria-hidden="true">
+                    <ArrowRight size={18} />
                   </div>
                 )}
-              </div>
+              </React.Fragment>
             ))}
           </div>
         </div>

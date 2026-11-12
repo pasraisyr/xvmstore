@@ -1,11 +1,30 @@
 import type {
+  Product,
   LearningPillar,
-  ComparisonItem,
   BonusItem,
   PricingPackage,
   FAQItem,
   Testimonial,
 } from '../types/sales'
+
+export const PRODUCTS: Product[] = [
+  {
+    id: 'book-1',
+    name: 'Buku 1',
+    price: 19.90,
+    originalPrice: 39.00,
+    image: '/images/book-1.jpeg',
+    badge: 'Pilihan Popular',
+  },
+  {
+    id: 'book-2',
+    name: 'Buku 2',
+    price: 19.90,
+    originalPrice: 39.00,
+    image: '/images/book-2.jpeg',
+    badge: 'Terlaris',
+  },
+]
 
 export const SITE_INFO = {
   title: 'UMRAH SO EASY',
@@ -30,51 +49,15 @@ export const JOURNEY_STEPS = [
 ]
 
 export const PAIN_POINTS = [
-  {
-    icon: 'Plane',
-    title: 'Flight nak booking macam mana?',
-    desc: 'Buntu nak pilih direct flight atau transit, tarikh tiket murah dan syarat bagasi jemaah.',
-  },
-  {
-    icon: 'Hotel',
-    title: 'Hotel nak pilih di mana?',
-    desc: 'Takut tersalah pilih hotel jauh dari dataran Masjidil Haram atau harga tercekik.',
-  },
-  {
-    icon: 'Smartphone',
-    title: 'Aplikasi apa yang perlu ada?',
-    desc: 'Pening dengan sistem Nusuk, tempahan slot Raudhah, SIM card dan e-wallet di Saudi.',
-  },
-  {
-    icon: 'FileCheck',
-    title: 'Macam mana urusan permit atau visa?',
-    desc: 'Keliru antara Visa Pelancong (Tourist e-Visa), Visa Umrah atau Visa Transit.',
-  },
-  {
-    icon: 'Car',
-    title: 'Bagaimana pengangkutan dari airport?',
-    desc: 'Risau ditipu ulat teksi airport Jeddah atau tak tahu cara naik Kereta Api Haramain (HHR).',
-  },
-  {
-    icon: 'MapPin',
-    title: 'Makkah dan Madinah nak susun macam mana?',
-    desc: 'Tak tahu turutan mana patut didahulukan, waktu ziarah terbaik dan elak kesesakan.',
-  },
-  {
-    icon: 'Coins',
-    title: 'Berapa bajet yang diperlukan?',
-    desc: 'Takut terlebih bajet atau tak pasti anggaran kos sebenar makan, hotel dan logistik.',
-  },
-  {
-    icon: 'Luggage',
-    title: 'Apa yang perlu dibawa?',
-    desc: 'Bimbang tertinggal ubatan penting, kelengkapan ihram, atau bawa barang yang dilarang.',
-  },
-  {
-    icon: 'BookOpen',
-    title: 'Bagaimana pula langkah ibadah Umrah?',
-    desc: 'Risau tersalah niat Miqat, pantang larang ihram, bilangan pusingan atau cara tahallul.',
-  },
+  { icon: 'Plane', title: 'Flight nak booking macam mana?' },
+  { icon: 'Hotel', title: 'Hotel nak pilih di mana?' },
+  { icon: 'Smartphone', title: 'Aplikasi apa yang perlu ada?' },
+  { icon: 'FileCheck', title: 'Macam mana urusan permit atau booking?' },
+  { icon: 'Car', title: 'Bagaimana pengangkutan dari airport?' },
+  { icon: 'MapPin', title: 'Makkah dan Madinah nak susun macam mana?' },
+  { icon: 'Coins', title: 'Berapa bajet yang diperlukan?' },
+  { icon: 'Luggage', title: 'Apa yang perlu dibawa?' },
+  { icon: 'BookOpen', title: 'Bagaimana pula langkah ibadah Umrah?' },
 ]
 
 export const LEARNING_PILLARS: LearningPillar[] = [
@@ -82,127 +65,93 @@ export const LEARNING_PILLARS: LearningPillar[] = [
     id: 'sebelum',
     title: 'Sebelum Berangkat',
     icon: 'PlaneTakeoff',
-    tagline: 'Langkah awal persediaan rapi di tanah air',
+    tagline: 'Persediaan sebelum memulakan perjalanan',
     topics: [
-      'Cara membuat persediaan Umrah mengikut garis masa (3 bulan - 1 minggu)',
-      'Perancangan bajet realistik & perbandingan kos DIY vs Agensi',
-      'Penerbangan: Cara banding harga tiket, direct flight vs transit jimat',
-      'Hotel: Tips pilih penginapan selamat, dekat dan patuh bajet',
-      'Pengangkutan: Panduan kereta api laju Haramain vs teksi / bas SAPTCO',
-      'Dokumen penting: e-Visa, pasport, salinan digital & insurans perjalanan',
-      'Barang keperluan & packing list lengkap untuk iklim Makkah & Madinah',
-      'Aplikasi yang wajib dipasang dan didaftar sebelum menaiki pesawat',
+      'Cara membuat persediaan Umrah',
+      'Perancangan bajet',
+      'Penerbangan',
+      'Hotel',
+      'Pengangkutan',
+      'Dokumen penting',
+      'Barang keperluan',
+      'Aplikasi yang diperlukan',
     ],
   },
   {
     id: 'online',
-    title: 'Urusan Online & Aplikasi',
+    title: 'Urusan Online',
     icon: 'Smartphone',
-    tagline: 'Kuasai teknologi perjalanan moden di Arab Saudi',
+    tagline: 'Aplikasi dan pengurusan online',
     topics: [
-      'Aplikasi penting untuk jemaah (Nusuk, Haramain Train, Careem/Uber)',
-      'Panduan langkah demi langkah tempahan slot Raudhah tanpa gagal',
-      'Cara mendapatkan maklumat perjalanan rasmi dan elak scam',
-      'Perkara kritikal yang perlu diaktifkan sebelum berangkat (eSIM, roaming)',
-      'Tips menggunakan platform tempahan hotel (Agoda, Booking.com, Trip.com)',
-      'Pengurusan kad debit antarabangsa (Wise / BigPay) untuk kadar tukaran terbaik',
+      'Aplikasi penting untuk jemaah',
+      'Cara mendapatkan maklumat perjalanan',
+      'Perkara yang perlu dibuat sebelum berangkat',
+      'Tips menggunakan platform tempahan',
     ],
   },
   {
     id: 'tanah-suci',
     title: 'Di Tanah Suci',
     icon: 'Compass',
-    tagline: 'Navigasi Makkah & Madinah dengan yakin tanpa pemandu pelancong',
+    tagline: 'Panduan berada di Makkah dan Madinah',
     topics: [
-      'Makkah Al-Mukarramah: Orientasi pintu masuk Masjidil Haram & laluan mudah',
-      'Madinah Al-Munawwarah: Rutin harian solat di Masjid Nabawi & adab ziarah',
-      'Pengangkutan antara bandar (Jeddah - Makkah - Madinah)',
-      'Tips check-in hotel, urusan deposit dan penyimpanan bagasi',
-      'Tempat-tempat penting bersejarah (Jabal Nur, Jabal Uhud, Quba)',
-      'Tips bergerak sendiri, elak ulat teksi dan lokasi makanan bajet yang sedap',
+      'Makkah',
+      'Madinah',
+      'Pengangkutan',
+      'Hotel',
+      'Tempat-tempat penting',
+      'Tips bergerak sendiri',
     ],
   },
   {
     id: 'ibadah',
     title: 'Ibadah Umrah',
     icon: 'HeartHandshake',
-    tagline: 'Rukun, wajib dan doa diringkaskan mengikut sunnah',
+    tagline: 'Panduan langkah ibadah Umrah',
     topics: [
-      'Ihram: Niat, lokasi Miqat (di atas flight / Qarnul Manazil / Bir Ali)',
-      'Pantang larang ihram dan cara elak daripada dikenakan dam',
-      'Tawaf: 7 pusingan, adab di Hajarul Aswad, Rukun Yamani & Maqam Ibrahim',
-      'Sa’i: 7 perjalanan antara Safa & Marwah dengan panduan lampu hijau',
-      'Tahallul: Cukur atau gunting rambut menandakan selesai ibadah Umrah',
-      'Himpunan doa, talbiyah dan zikir ringkas yang mudah dihafal atau dibaca',
+      'Ihram',
+      'Niat',
+      'Tawaf',
+      "Sa'i",
+      'Tahallul',
+      'Doa dan zikir berkaitan',
     ],
   },
   {
     id: 'checklist',
     title: 'Checklist Persediaan',
     icon: 'ClipboardCheck',
-    tagline: 'Senarai semak praktikal supaya tiada apa yang tercicir',
+    tagline: 'Senarai semak sebelum berangkat',
     topics: [
-      'Apa yang perlu dibawa: Beg sandang, kasut selesa, gunting tahallul, ubat peribadi',
-      'Apa yang perlu disediakan: Salinan pasport, slip visa, ubat batuk & selsema',
-      'Perkara yang perlu dibuat sebelum meninggalkan rumah di Malaysia',
-      'Checklist beg kabin vs beg kargo mengikut piawaian syarikat penerbangan',
+      'Apa yang perlu dibawa',
+      'Apa yang perlu disediakan',
+      'Perkara yang perlu dibuat sebelum meninggalkan Malaysia',
     ],
   },
 ]
 
-export const COMPARISONS: ComparisonItem[] = [
-  {
-    feature: 'Masa Mencari Maklumat',
-    diyWithBook: '2-3 jam membaca panduan berstruktur A-Z dalam 1 buku.',
-    withoutBook: '40+ jam mencari di TikTok, Facebook, YouTube & forum lama yang mengelirukan.',
-  },
-  {
-    feature: 'Ketepatan Maklumat',
-    diyWithBook: 'Terkini, praktikal mengikut sistem digital Arab Saudi semasa.',
-    withoutBook: 'Banyak info lapuk, peraturan visa yang telah mansuh & pengalaman usang.',
-  },
-  {
-    feature: 'Fleksibiliti Perjalanan',
-    diyWithBook: 'Bebas tentukan tarikh, flight, hotel kegemaran & bajet keluarga.',
-    withoutBook: 'Terikat dengan jadual ketat agensi, bilik kongsi atau kos pakej melambung.',
-  },
-  {
-    feature: 'Tahap Keyakinan',
-    diyWithBook: 'Yakin kerana tahu turutan langkah demi langkah dari rumah ke Kaabah.',
-    withoutBook: 'Rasa cemas, takut tersesat, bimbang visa ditolak atau salah tertib ibadah.',
-  },
-  {
-    feature: 'Penjimatan Kos',
-    diyWithBook: 'Boleh jimat RM2,000 - RM5,000 seorang dengan memilih sendiri tawaran terbaik.',
-    withoutBook: 'Membayar margin keuntungan tinggi agensi pakej yang mahal.',
-  },
-]
-
 export const TARGET_AUDIENCES = [
-  'Mahu cuba Umrah DIY tetapi perlukan panduan tersusun',
-  'Tidak mahu bergantung 100% kepada jadual ketat pakej travel',
-  'Mahu mengurus penerbangan dan pilihan hotel sendiri mengikut bajet',
-  'Mahu faham keseluruhan proses Umrah sebelum melangkah ke airport',
-  'Mahu berjimat dengan merancang jadual dan pengangkutan sendiri',
-  'Pertama kali hendak menunaikan Umrah dan mahu ketenangan minda',
-  'Mahu membawa keluarga (anak kecil / ibu bapa) dengan rentak santai sendiri',
+  'Mahu cuba Umrah DIY',
+  'Tidak mahu bergantung sepenuhnya kepada pakej travel',
+  'Mahu mengurus penerbangan dan hotel sendiri',
+  'Mahu faham proses Umrah sebelum berangkat',
+  'Mahu berjimat dengan merancang perjalanan sendiri',
+  'Pertama kali hendak menunaikan Umrah',
+  'Mahu membawa keluarga mengerjakan Umrah',
 ]
 
 export const THREE_KEYS = [
   {
     number: '01',
-    title: 'Tahu apa yang perlu dibuat',
-    desc: 'Bukan semua benda kena buat sekaligus. Fokus pada fasa demi fasa: dokumen, logistik, ibadah.',
+    title: 'Tahu apa yang perlu dibuat.',
   },
   {
     number: '02',
-    title: 'Tahu bila perlu dibuat',
-    desc: 'Bila waktu tepat mohon visa, bila slot Raudhah dibuka, dan bila perlu niat ihram di Miqat.',
+    title: 'Tahu bila perlu dibuat.',
   },
   {
     number: '03',
-    title: 'Tahu di mana mencari maklumat',
-    desc: 'Tak perlu lemas dalam lautan internet. Rujuk satu panduan yang lengkap dan tepat.',
+    title: 'Tahu di mana hendak mencari maklumat.',
   },
 ]
 
@@ -210,32 +159,29 @@ export const BONUSES: BonusItem[] = [
   {
     id: 'bonus-1',
     number: 'Bonus #1',
-    title: 'Checklist Umrah DIY Lengkap',
-    value: 'Nilai RM 39',
-    badge: 'Percuma Dalam Pakej',
+    title: 'Checklist Umrah DIY',
+    value: 'Percuma',
+    badge: 'Bonus Percuma',
     icon: 'CheckSquare',
-    description:
-      'Senarai semak cetak (printable) & digital mengandungi segala perkara yang wajib diselesaikan 30 hari, 7 hari, dan 24 jam sebelum berlepas.',
+    description: 'Senarai perkara yang perlu diselesaikan sebelum berangkat.',
   },
   {
     id: 'bonus-2',
     number: 'Bonus #2',
-    title: 'Travel Planning & Budget Sheet',
-    value: 'Nilai RM 49',
-    badge: 'Percuma Dalam Pakej',
+    title: 'Travel Planning Sheet',
+    value: 'Percuma',
+    badge: 'Bonus Percuma',
     icon: 'FileSpreadsheet',
-    description:
-      'Templat pengiraan bajet (Google Sheets & Excel) untuk merekod harga tiket penerbangan, hotel, pengangkutan, makanan, dan itinerary harian.',
+    description: 'Tempat untuk mencatat penerbangan, hotel, pengangkutan dan itinerary.',
   },
   {
     id: 'bonus-3',
     number: 'Bonus #3',
-    title: 'Video Guide Eksklusif via QR Code',
-    value: 'Nilai RM 59',
-    badge: 'Percuma Dalam Pakej',
+    title: 'Video Guide',
+    value: 'Percuma',
+    badge: 'Bonus Percuma',
     icon: 'Video',
-    description:
-      'Akses eksklusif melalui imbasan QR Code dalam buku yang menghubungkan anda ke tutorial video saluran YouTube EzGo Muslim Traveller.',
+    description: 'QR code dalam buku yang membawa pembaca ke saluran YouTube EzGo Muslim Traveller.',
   },
 ]
 
@@ -391,4 +337,4 @@ export const HITPAY_PAYMENT_METHODS = [
 ]
 
 export const DISCLAIMER_TEXT =
-  'Nota Penafian Rasmi: UMRAH SO EASY ialah panduan ringkas berdasarkan pengalaman, penyelidikan dan maklumat yang dikumpulkan untuk membantu perancangan Umrah DIY. Polisi visa, aplikasi rasmi kerajaan (seperti Nusuk), peraturan syarikat penerbangan, penginapan hotel, pengangkutan darat dan peraturan semasa di Arab Saudi boleh berubah dari semasa ke semasa mengikut ketetapan pihak berkuasa. Pembaca disarankan menyemak maklumat terkini daripada sumber rasmi sebelum membuat tempahan muktamad atau memulakan perjalanan.'
+  'Nota: UMRAH SO EASY ialah panduan ringkas berdasarkan pengalaman dan maklumat yang dikumpulkan untuk membantu perancangan Umrah DIY. Polisi visa, aplikasi, penerbangan, hotel, pengangkutan dan peraturan di Arab Saudi boleh berubah dari semasa ke semasa. Pembaca disarankan menyemak maklumat terkini daripada sumber rasmi sebelum membuat tempahan atau perjalanan.'

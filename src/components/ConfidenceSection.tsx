@@ -1,5 +1,4 @@
 import React from 'react'
-import { CheckCircle2 } from 'lucide-react'
 import { THREE_KEYS } from '../data/salesData'
 
 export const ConfidenceSection: React.FC = () => {
@@ -7,10 +6,12 @@ export const ConfidenceSection: React.FC = () => {
     <section className="section-pad confidence-section">
       <div className="container">
         <div className="section-header">
-          <span className="badge-tag gold">Ketenangan Minda</span>
-          <h2 className="section-title">Tak Perlu Jadi &ldquo;Travel Expert&rdquo;</h2>
+          <h2 className="section-title">TAK PERLU JADI TRAVEL EXPERT</h2>
           <p className="section-subtitle">
-            Anda tak perlu pengalaman pusing keliling dunia untuk mula merancang Umrah DIY yang berjaya. Yang anda perlukan hanyalah 3 perkara ini:
+            Anda tak perlu mahir travel untuk mula merancang Umrah DIY.
+          </p>
+          <p style={{ fontSize: '1.15rem', color: 'var(--slate-800)', fontWeight: 700, marginTop: '12px' }}>
+            Yang penting ialah:
           </p>
         </div>
 
@@ -19,16 +20,17 @@ export const ConfidenceSection: React.FC = () => {
             <div key={idx} className="key-card">
               <div className="key-card-num">{k.number}</div>
               <h3 className="key-card-title">{k.title}</h3>
-              <p className="key-card-desc">{k.desc}</p>
             </div>
           ))}
         </div>
 
         <div className="confidence-verdict">
-          <h4>
-            <CheckCircle2 size={24} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '8px', color: 'var(--primary-700)' }} />
-            Dan yang paling penting... Ada satu panduan tepat yang boleh dirujuk bila-bila masa!
-          </h4>
+          <p className="confidence-verdict-sub">
+            Dan yang paling penting...
+          </p>
+          <h3 className="confidence-verdict-title">
+            Ada panduan yang boleh dirujuk.
+          </h3>
         </div>
       </div>
     </section>

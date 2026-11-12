@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
-import { BookOpen, Menu, X, ShieldCheck } from 'lucide-react'
+import { BookOpen, Menu, X, ShieldCheck, ShoppingCart } from 'lucide-react'
 import { SITE_INFO } from '../data/salesData'
 
 interface NavbarProps {
   onOpenOrder: (packageId?: string) => void
+  cartCount?: number
+  onOpenCart?: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenOrder,
+  cartCount = 0,
+  onOpenCart,
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleNavClick = (id: string) => {
@@ -21,7 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
     <>
       {/* Top Announcement Bar */}
       <div className="announcement-bar">
-        <span>🕌 <strong>Tawaran Khas:</strong> Percuma 3 Bonus Eksklusif (Checklist + Planning Sheet + Video Guide)</span>
+        <span>🕋 <strong>UMRAH SO EASY:</strong> Panduan Ringkas Umrah DIY dari Malaysia hingga Tanah Suci</span>
       </div>
 
       {/* Main Navbar */}
@@ -42,6 +48,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
               <button type="button" className="nav-link" onClick={() => handleNavClick('masalah')}>
                 Masalah
               </button>
+              <button type="button" className="nav-link" onClick={() => handleNavClick('solusi')}>
+                Solusi
+              </button>
               <button type="button" className="nav-link" onClick={() => handleNavClick('modul')}>
                 Apa Dipelajari
               </button>
@@ -51,31 +60,43 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
               <button type="button" className="nav-link" onClick={() => handleNavClick('bonus')}>
                 Bonus
               </button>
-              <button type="button" className="nav-link" onClick={() => handleNavClick('harga')}>
-                Harga &amp; Pakej
-              </button>
-              <button type="button" className="nav-link" onClick={() => handleNavClick('faq')}>
-                Soalan Lazim
+              <button type="button" className="nav-link" onClick={() => handleNavClick('produk')}>
+                Pilihan Buku
               </button>
             </nav>
 
-            <button
-              type="button"
-              className="nav-cta-btn"
-              onClick={() => onOpenOrder()}
-            >
-              <ShieldCheck size={18} />
-              <span>Tempah Sekarang</span>
-            </button>
+            <div className="navbar-right-actions">
+              {onOpenCart && (
+                <button
+                  type="button"
+                  className="nav-cart-btn"
+                  onClick={onOpenCart}
+                  aria-label="Troli pesanan"
+                >
+                  <ShoppingCart size={19} />
+                  <span className="nav-cart-label">Troli</span>
+                  {cartCount > 0 && <span className="nav-cart-badge">{cartCount}</span>}
+                </button>
+              )}
 
-            <button
-              type="button"
-              className="mobile-menu-toggle"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle navigation"
-            >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
-            </button>
+              <button
+                type="button"
+                className="nav-cta-btn"
+                onClick={() => onOpenOrder()}
+              >
+                <ShieldCheck size={18} />
+                <span>Tempah Sekarang</span>
+              </button>
+
+              <button
+                type="button"
+                className="mobile-menu-toggle"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle navigation"
+              >
+                {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -83,6 +104,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
         <div className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
           <button type="button" className="nav-link" onClick={() => handleNavClick('masalah')}>
             Masalah
+          </button>
+          <button type="button" className="nav-link" onClick={() => handleNavClick('solusi')}>
+            Solusi
           </button>
           <button type="button" className="nav-link" onClick={() => handleNavClick('modul')}>
             Apa Dipelajari
@@ -93,12 +117,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
           <button type="button" className="nav-link" onClick={() => handleNavClick('bonus')}>
             Bonus Percuma
           </button>
-          <button type="button" className="nav-link" onClick={() => handleNavClick('harga')}>
-            Pilihan Pakej
+          <button type="button" className="nav-link" onClick={() => handleNavClick('produk')}>
+            Pilihan Buku (RM 19.90)
           </button>
-          <button type="button" className="nav-link" onClick={() => handleNavClick('faq')}>
-            Soalan Lazim
-          </button>
+
+          {onOpenCart && (
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '10px' }}
+              onClick={() => {
+                setMobileMenuOpen(false)
+                onOpenCart()
+              }}
+            >
+              <ShoppingCart size={18} />
+              <span>Lihat Troli ({cartCount})</span>
+            </button>
+          )}
+
           <button
             type="button"
             className="btn-cta"
@@ -108,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenOrder }) => {
               onOpenOrder()
             }}
           >
-            SAYA NAK UMRAH SO EASY
+            TEMPAH SEKARANG
           </button>
         </div>
       </header>

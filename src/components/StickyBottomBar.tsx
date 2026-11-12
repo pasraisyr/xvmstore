@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Clock, ArrowRight } from 'lucide-react'
+import { ArrowRight, ShoppingCart } from 'lucide-react'
 
 interface StickyBottomBarProps {
   onOpenOrder: () => void
+  cartCount?: number
+  cartTotal?: number
+  onOpenCart?: () => void
 }
 
-export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({ onOpenOrder }) => {
+export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
+  onOpenOrder,
+  cartCount = 0,
+  cartTotal = 0,
+  onOpenCart,
+}) => {
   const [visible, setVisible] = useState(false)
-  const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 28, seconds: 15 })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,62 +30,58 @@ export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({ onOpenOrder })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Simple countdown timer tick
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 }
-        }
-        if (prev.minutes > 0) {
-          return { ...prev, minutes: 59, seconds: 59 }
-        }
-        if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 }
-        }
-        return { hours: 4, minutes: 30, seconds: 0 }
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [])
-
   if (!visible) return null
 
-  const formatNum = (n: number) => n.toString().padStart(2, '0')
+  const handleAction = () => {
+    if (cartCount > 0 && onOpenCart) {
+      onOpenCart()
+    } else {
+      const el = document.getElementById('produk') || document.getElementById('harga')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        onOpenOrder()
+      }
+    }
+  }
 
   return (
     <div className="sticky-bottom-bar">
       <div className="sticky-inner">
         <div className="sticky-left">
-          <div className="sticky-timer-box">
-            <Clock size={16} color="var(--gold-400)" />
-            <span>Tawaran Tamat:</span>
-            <span className="sticky-timer-val">
-              {formatNum(timeLeft.hours)}:{formatNum(timeLeft.minutes)}:{formatNum(timeLeft.seconds)}
-            </span>
-          </div>
-
-          <div className="sticky-title">
-            UMRAH SO EASY — Termasuk 3 Bonus Percuma
+          <div className="sticky-title" style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>
+            UMRAH SO EASY — Panduan Ringkas Umrah DIY
           </div>
         </div>
 
         <div className="sticky-right">
           <div className="sticky-price">
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0', marginRight: '4px' }}>
-              Dari
-            </span>
-            RM 39
+            {cartCount > 0 ? (
+              <span style={{ fontSize: '0.95rem' }}>
+                RM {cartTotal.toFixed(2)}{' '}
+                <small style={{ fontSize: '0.78rem', opacity: 0.85 }}>({cartCount} naskhah)</small>
+              </span>
+            ) : (
+              <span>RM 19.90</span>
+            )}
           </div>
 
           <button
             type="button"
             className="sticky-cta-btn"
-            onClick={onOpenOrder}
+            onClick={handleAction}
           >
-            <span>Tempah Sekarang</span>
-            <ArrowRight size={16} style={{ display: 'inline', verticalAlign: 'middle', marginLeft: '4px' }} />
+            {cartCount > 0 ? (
+              <>
+                <ShoppingCart size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+                <span>LIHAT TROLI &amp; TEMPAH</span>
+              </>
+            ) : (
+              <>
+                <span>PILIH BUKU SEKARANG</span>
+                <ArrowRight size={16} style={{ display: 'inline', verticalAlign: 'middle', marginLeft: '4px' }} />
+              </>
+            )}
           </button>
         </div>
       </div>

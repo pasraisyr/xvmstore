@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import { X, ShieldCheck, CheckCircle2, CreditCard, MessageCircle, Loader2 } from 'lucide-react'
-import { PRICING_PACKAGES, SITE_INFO } from '../data/salesData'
-import type { OrderFormData } from '../types/sales'
+import { SITE_INFO, PRODUCTS } from '../data/salesData'
+import type { OrderFormData, CartItem } from '../types/sales'
 
 interface OrderModalProps {
   isOpen: boolean
   onClose: () => void
   initialPackageId?: string
+  cartItems?: CartItem[]
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
   isOpen,
   onClose,
-  initialPackageId = 'fizikal',
+  cartItems = [],
 }) => {
-  const [selectedPkgId, setSelectedPkgId] = useState(initialPackageId)
   const [paymentMethod, setPaymentMethod] = useState<'fpx' | 'duitnow' | 'card'>('fpx')
   const [formData, setFormData] = useState<Omit<OrderFormData, 'packageId' | 'paymentMethod'>>({
     fullName: '',
@@ -30,10 +30,20 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   if (!isOpen) return null
 
-  const selectedPackage =
-    PRICING_PACKAGES.find((p) => p.id === selectedPkgId) || PRICING_PACKAGES[1]
+  // Calculate items and total based on cartItems or fallback
+  const hasCart = cartItems.length > 0
+  const activeItems: CartItem[] = hasCart
+    ? cartItems
+    : [{ product: PRODUCTS[0], quantity: 1 }]
 
-  const isPhysical = selectedPackage.format !== 'digital'
+  const totalPrice = activeItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  )
+
+  const itemsDescription = activeItems
+    .map((item) => `${item.product.name} (x${item.quantity})`)
+    .join(', ')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,16 +57,23 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   }
 
   const handleWhatsAppOrder = () => {
+    const itemsListText = activeItems
+      .map(
+        (it) =>
+          `  - ${it.product.name} x ${it.quantity} = RM ${(it.product.price * it.quantity).toFixed(2)}`
+      )
+      .join('\n')
+
     const text = encodeURIComponent(
-      `Assalamualaikum ${SITE_INFO.merchantName},\n\nSaya ingin menempah panduan ${SITE_INFO.title}:\n\n` +
-        `• Pakej: ${selectedPackage.name} (RM ${selectedPackage.price})\n` +
-        `• Nama: ${formData.fullName || '-'}\n` +
-        `• Telefon: ${formData.phone || '-'}\n` +
-        `• Emel: ${formData.email || '-'}\n` +
-        (isPhysical
-          ? `• Alamat Penghantaran: ${formData.address || '-'}, ${formData.postcode || ''} ${formData.city || ''}, ${formData.state}\n`
-          : '') +
-        `• Kaedah Bayaran: ${paymentMethod.toUpperCase()} (HitPay)\n\nMohon bantu saya untuk langkah pembayaran seterusnya. Terima kasih!`
+      `Assalamualaikum ${SITE_INFO.merchantName},\n\nSaya ingin membuat tempahan ${SITE_INFO.title}:\n\n` +
+        `• Senarai Pesanan:\n${itemsListText}\n` +
+        `• Jumlah Bayaran: RM ${totalPrice.toFixed(2)}\n\n` +
+        `• Butiran Penghantaran:\n` +
+        `  - Nama: ${formData.fullName || '-'}\n` +
+        `  - Telefon: ${formData.phone || '-'}\n` +
+        `  - Emel: ${formData.email || '-'}\n` +
+        `  - Alamat: ${formData.address || '-'}, ${formData.postcode || ''} ${formData.city || ''}, ${formData.state}\n` +
+        `• Kaedah Bayaran Pilihan: ${paymentMethod.toUpperCase()} (HitPay)\n\nMohon bantu saya untuk proses penghantaran & pembayaran. Terima kasih!`
     )
     window.open(`https://wa.me/${SITE_INFO.whatsappNumber}?text=${text}`, '_blank')
   }
@@ -122,11 +139,11 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 }}
               >
                 <div style={{ fontWeight: 700, marginBottom: '6px' }}>Ringkasan Pesanan:</div>
-                <div style={{ fontSize: '0.9rem', color: 'var(--slate-700)' }}>
-                  Pakej: <strong>{selectedPackage.name}</strong>
+                <div style={{ fontSize: '0.9rem', color: 'var(--slate-700)', marginBottom: '4px' }}>
+                  Produk: <strong>{itemsDescription}</strong>
                 </div>
                 <div style={{ fontSize: '0.9rem', color: 'var(--slate-700)' }}>
-                  Jumlah Bayaran: <strong>RM {selectedPackage.price}.00</strong>
+                  Jumlah Bayaran: <strong>RM {totalPrice.toFixed(2)}</strong>
                 </div>
                 <div style={{ fontSize: '0.9rem', color: 'var(--slate-700)' }}>
                   Saluran: <strong>{paymentMethod.toUpperCase()} (HitPay)</strong>
@@ -156,39 +173,32 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              {/* Package Selector */}
-              <div className="package-selector">
-                <label className="package-selector-label">1. Pilih Pakej Pilihan Anda:</label>
-                <div className="package-option-cards">
-                  {PRICING_PACKAGES.map((pkg) => {
-                    const isSelected = pkg.id === selectedPkgId
-                    return (
-                      <div
-                        key={pkg.id}
-                        className={`package-option-card ${isSelected ? 'selected' : ''}`}
-                        onClick={() => setSelectedPkgId(pkg.id)}
-                      >
-                        <div className="package-option-left">
-                          <input
-                            type="radio"
-                            name="selectedPkg"
-                            checked={isSelected}
-                            onChange={() => setSelectedPkgId(pkg.id)}
-                            style={{ accentColor: 'var(--primary-700)' }}
-                          />
-                          <div>
-                            <div className="package-option-name">
-                              {pkg.name} {pkg.popular && <span style={{ color: 'var(--gold-600)', fontSize: '0.8rem' }}>(Pilihan Popular)</span>}
-                            </div>
-                            <div style={{ fontSize: '0.78rem', color: 'var(--slate-500)' }}>
-                              {pkg.bonuses.length} Bonus Percuma Termasuk
-                            </div>
-                          </div>
+              {/* Product Confirmation Card */}
+              <div style={{ background: 'var(--primary-900)', borderRadius: 'var(--radius-lg)', padding: '16px 20px', color: '#ffffff', marginBottom: '22px', border: '1px solid var(--gold-600)' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--gold-400)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
+                  Ringkasan Tempahan Anda
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+                  {activeItems.map((it) => (
+                    <div key={it.product.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img src={it.product.image} alt={it.product.name} style={{ width: '36px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{it.product.name}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--slate-300)' }}>RM {it.product.price.toFixed(2)} × {it.quantity}</div>
                         </div>
-                        <div className="package-option-price">RM {pkg.price}</div>
                       </div>
-                    )
-                  })}
+                      <div style={{ fontWeight: 800, color: 'var(--gold-400)' }}>
+                        RM {(it.product.price * it.quantity).toFixed(2)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingTop: '6px' }}>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--slate-300)' }}>Jumlah Keseluruhan:</span>
+                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--gold-400)' }}>
+                    RM {totalPrice.toFixed(2)}
+                  </span>
                 </div>
               </div>
 
@@ -232,60 +242,56 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                     />
                   </div>
 
-                  {isPhysical && (
-                    <>
-                      <div className="form-group full">
-                        <label className="form-label">Alamat Lengkap Penghantaran Pos *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="No. Rumah, Jalan, Taman / Kawasan"
-                          className="form-input"
-                          value={formData.address}
-                          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        />
-                      </div>
+                  <div className="form-group full">
+                    <label className="form-label">Alamat Lengkap Penghantaran Pos *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="No. Rumah, Jalan, Taman / Kawasan"
+                      className="form-input"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    />
+                  </div>
 
-                      <div className="form-group">
-                        <label className="form-label">Bandar *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Contoh: Shah Alam"
-                          className="form-input"
-                          value={formData.city}
-                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        />
-                      </div>
+                  <div className="form-group">
+                    <label className="form-label">Bandar *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Contoh: Shah Alam"
+                      className="form-input"
+                      value={formData.city}
+                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    />
+                  </div>
 
-                      <div className="form-group">
-                        <label className="form-label">Poskod *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Contoh: 40000"
-                          className="form-input"
-                          value={formData.postcode}
-                          onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
-                        />
-                      </div>
+                  <div className="form-group">
+                    <label className="form-label">Poskod *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Contoh: 40000"
+                      className="form-input"
+                      value={formData.postcode}
+                      onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
+                    />
+                  </div>
 
-                      <div className="form-group full">
-                        <label className="form-label">Negeri *</label>
-                        <select
-                          className="form-select"
-                          value={formData.state}
-                          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                        >
-                          {MALAYSIAN_STATES.map((st) => (
-                            <option key={st} value={st}>
-                              {st}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </>
-                  )}
+                  <div className="form-group full">
+                    <label className="form-label">Negeri *</label>
+                    <select
+                      className="form-select"
+                      value={formData.state}
+                      onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    >
+                      {MALAYSIAN_STATES.map((st) => (
+                        <option key={st} value={st}>
+                          {st}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -322,10 +328,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 <div>
                   <div className="order-total-label">Jumlah Perlu Dibayar:</div>
                   <div style={{ fontSize: '0.82rem', color: 'var(--slate-500)' }}>
-                    {isPhysical ? 'Termasuk E-Book + 3 Bonus + Penghantaran' : 'Akses Segera Emel'}
+                    {activeItems.length} jenis item ({activeItems.reduce((acc, it) => acc + it.quantity, 0)} naskhah)
                   </div>
                 </div>
-                <div className="order-total-price">RM {selectedPackage.price}.00</div>
+                <div className="order-total-price">RM {totalPrice.toFixed(2)}</div>
               </div>
 
               {/* Actions */}
@@ -344,7 +350,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                   ) : (
                     <>
                       <CreditCard size={20} />
-                      <span>BAYAR SEKARANG VIA HITPAY (RM {selectedPackage.price})</span>
+                      <span>BAYAR SEKARANG VIA HITPAY (RM {totalPrice.toFixed(2)})</span>
                     </>
                   )}
                 </button>

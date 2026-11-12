@@ -30,10 +30,9 @@ export const PainPoints: React.FC = () => {
     <section id="masalah" className="section-pad pain-section">
       <div className="container">
         <div className="section-header">
-          <span className="badge-tag gold">Dilema Bakal Jemaah DIY</span>
-          <h2 className="section-title">Umrah DIY Nampak Susah &amp; Menakutkan?</h2>
+          <h2 className="section-title">Umrah DIY nampak susah...</h2>
           <p className="section-subtitle">
-            Bila mula terdetik niat nak buat Umrah sendiri, macam-macam persoalan berlegar di fikiran tanpa jawapan yang tersusun:
+            Bila mula cari maklumat, macam-macam yang perlu difikirkan:
           </p>
         </div>
 
@@ -44,19 +43,15 @@ export const PainPoints: React.FC = () => {
                 {ICON_MAP[item.icon] || <AlertTriangle size={22} />}
               </div>
               <h3 className="pain-card-title">{item.title}</h3>
-              <p className="pain-card-desc">{item.desc}</p>
             </div>
           ))}
         </div>
 
         <div className="pain-alert-banner">
-          <AlertTriangle size={32} color="#dc2626" style={{ flexShrink: 0 }} />
-          <div>
-            <strong>Maklumat terlalu banyak di internet.</strong>
-            <p style={{ color: '#7f1d1d', marginTop: '4px', fontSize: '0.95rem' }}>
-              Buka YouTube lain, tengok TikTok lain, baca blog lama info dah lapuk. Kadang-kadang <em>semakin cari, semakin pening dan keliru!</em>
-            </p>
-          </div>
+          <AlertTriangle size={28} color="#dc2626" style={{ flexShrink: 0 }} />
+          <p style={{ color: '#7f1d1d', margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>
+            Maklumat terlalu banyak. Kadang-kadang semakin cari, semakin pening.
+          </p>
         </div>
       </div>
     </section>

@@ -8,25 +8,74 @@ import { Comparison } from './components/Comparison'
 import { TargetAudience } from './components/TargetAudience'
 import { ConfidenceSection } from './components/ConfidenceSection'
 import { BookPreview } from './components/BookPreview'
+import { ValueProposition } from './components/ValueProposition'
+import { ProductList } from './components/ProductList'
 import { Bonuses } from './components/Bonuses'
-import { Pricing } from './components/Pricing'
-import { Testimonials } from './components/Testimonials'
-import { FAQSection } from './components/FAQSection'
-import { FinalCTA } from './components/FinalCTA'
 import { Disclaimer } from './components/Disclaimer'
-import { HitPayCompliance } from './components/HitPayCompliance'
+import { FinalCTA } from './components/FinalCTA'
 import { Footer } from './components/Footer'
 import { OrderModal } from './components/OrderModal'
+import { CartDrawer } from './components/CartDrawer'
 import { StickyBottomBar } from './components/StickyBottomBar'
+import { PRODUCTS } from './data/salesData'
+import type { CartItem, Product } from './types/sales'
+import { ShoppingCart, Check, X } from 'lucide-react'
 import './styles/sales.css'
 
 export default function App() {
   const [orderModalOpen, setOrderModalOpen] = useState(false)
-  const [selectedPackageId, setSelectedPackageId] = useState<string>('fizikal')
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false)
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  const handleOpenOrder = (packageId?: string) => {
-    if (packageId) {
-      setSelectedPackageId(packageId)
+  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const totalCartPrice = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+
+  const handleAddToCart = (product: Product, quantity: number = 1) => {
+    setCart((prevCart) => {
+      const idx = prevCart.findIndex((it) => it.product.id === product.id)
+      if (idx > -1) {
+        const updated = [...prevCart]
+        updated[idx] = {
+          ...updated[idx],
+          quantity: updated[idx].quantity + quantity,
+        }
+        return updated
+      } else {
+        return [...prevCart, { product, quantity }]
+      }
+    })
+
+    setToastMessage(`"${product.name}" telah ditambah ke troli!`)
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 4000)
+  }
+
+  const handleDirectBuy = (product: Product, quantity: number = 1) => {
+    handleAddToCart(product, quantity)
+    setOrderModalOpen(true)
+  }
+
+  const handleUpdateQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      handleRemoveItem(productId)
+      return
+    }
+    setCart((prev) =>
+      prev.map((item) =>
+        item.product.id === productId ? { ...item, quantity } : item
+      )
+    )
+  }
+
+  const handleRemoveItem = (productId: string) => {
+    setCart((prev) => prev.filter((item) => item.product.id !== productId))
+  }
+
+  const handleOpenOrder = () => {
+    if (cart.length === 0) {
+      setCart([{ product: PRODUCTS[0], quantity: 1 }])
     }
     setOrderModalOpen(true)
   }
@@ -35,70 +84,135 @@ export default function App() {
     setOrderModalOpen(false)
   }
 
+  const handleCheckoutFromDrawer = () => {
+    setCartDrawerOpen(false)
+    setOrderModalOpen(true)
+  }
+
   return (
     <div className="umrah-sales-page">
-      {/* 1. Header & Navigation */}
-      <Navbar onOpenOrder={handleOpenOrder} />
+      {/* Navigation Header */}
+      <Navbar
+        onOpenOrder={handleOpenOrder}
+        cartCount={totalCartCount}
+        onOpenCart={() => setCartDrawerOpen(true)}
+      />
 
       <main>
-        {/* 2. Hero Section */}
+        {/* 1. Hero Section */}
         <Hero onOpenOrder={handleOpenOrder} />
 
-        {/* 3. Masalah Customer (Pain Points) */}
+        {/* 2. Masalah Customer */}
         <PainPoints />
 
-        {/* 4. Solution & Journey Flow Roadmap */}
+        {/* 3. Solution */}
         <Solution />
 
-        {/* 5. Apa Yang Anda Akan Belajar (5 Modul Utama) */}
+        {/* 4. Apa Yang Anda Akan Belajar? */}
         <LearningModules />
 
-        {/* 6. Apa Membezakan & Value Proposition */}
+        {/* 5. Apa Yang Membezakan UMRAH SO EASY? */}
         <Comparison />
 
-        {/* 7. Untuk Siapa? (Audience Suitability) */}
+        {/* 6. Untuk Siapa? */}
         <TargetAudience />
 
-        {/* 8. Tak Perlu Jadi Travel Expert (3 Kunci Utama) */}
+        {/* 7. Tak Perlu Jadi Travel Expert */}
         <ConfidenceSection />
 
-        {/* 9. Preview Buku & Visual Interior Spread */}
+        {/* 8. Preview Buku */}
         <BookPreview />
 
-        {/* 10. Cadangan 3 Bonus Percuma Eksklusif */}
+        {/* 9. Value Proposition */}
+        <ValueProposition />
+
+        {/* 10. Senarai Produk Pilihan (Buku 1 & Buku 2 - RM 19.90) */}
+        <ProductList
+          onAddToCart={handleAddToCart}
+          onDirectBuy={handleDirectBuy}
+        />
+
+        {/* 11. Cadangan Bonus */}
         <Bonuses />
 
-        {/* 11. Pakej Harga & Integrasi HitPay */}
-        <Pricing onSelectPackage={handleOpenOrder} />
-
-        {/* 12. Testimoni & Bukti Sosial Jemaah DIY */}
-        <Testimonials />
-
-        {/* 13. Soalan Lazim (FAQ Accordion) */}
-        <FAQSection />
-
-        {/* 14. Final Call To Action */}
-        <FinalCTA onOpenOrder={handleOpenOrder} />
-
-        {/* 15. Penafian Rasmi Kerajaan Saudi */}
+        {/* 12. Disclaimer */}
         <Disclaimer />
 
-        {/* 16. Pematuhan Perniagaan & Polisi HitPay */}
-        <HitPayCompliance />
+        {/* 13. Final CTA */}
+        <FinalCTA onOpenOrder={handleOpenOrder} />
       </main>
 
-      {/* 17. Footer Rasmi Perniagaan */}
+      {/* Footer Rasmi Perniagaan */}
       <Footer />
 
-      {/* 18. Floating Sticky Bottom Bar dengan Countdown */}
-      <StickyBottomBar onOpenOrder={() => handleOpenOrder('fizikal')} />
+      {/* Floating Sticky Bottom Bar */}
+      <StickyBottomBar
+        onOpenOrder={handleOpenOrder}
+        cartCount={totalCartCount}
+        cartTotal={totalCartPrice}
+        onOpenCart={() => setCartDrawerOpen(true)}
+      />
 
-      {/* 19. Modal Checkout Interaktif HitPay */}
+      {/* Floating Cart Button (Right Side) */}
+      <button
+        type="button"
+        className="floating-cart-trigger"
+        onClick={() => setCartDrawerOpen(true)}
+        aria-label="Lihat Troli"
+      >
+        <ShoppingCart size={24} />
+        {totalCartCount > 0 && (
+          <span className="floating-cart-badge">{totalCartCount}</span>
+        )}
+      </button>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="cart-toast-banner">
+          <div className="cart-toast-content">
+            <div className="cart-toast-icon">
+              <Check size={18} strokeWidth={3} />
+            </div>
+            <span>{toastMessage}</span>
+          </div>
+          <div className="cart-toast-actions">
+            <button
+              type="button"
+              className="cart-toast-view-btn"
+              onClick={() => {
+                setToastMessage(null)
+                setCartDrawerOpen(true)
+              }}
+            >
+              Lihat Troli
+            </button>
+            <button
+              type="button"
+              className="cart-toast-close"
+              onClick={() => setToastMessage(null)}
+              aria-label="Tutup notifikasi"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Cart Drawer */}
+      <CartDrawer
+        isOpen={cartDrawerOpen}
+        onClose={() => setCartDrawerOpen(false)}
+        items={cart}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+        onCheckout={handleCheckoutFromDrawer}
+      />
+
+      {/* Modal Checkout HitPay */}
       <OrderModal
-        key={selectedPackageId}
         isOpen={orderModalOpen}
         onClose={handleCloseOrder}
-        initialPackageId={selectedPackageId}
+        cartItems={cart}
       />
     </div>
   )
